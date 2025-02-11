@@ -1,13 +1,21 @@
 package com.github.guyapooye.spaceutilities.registries.forge
 
+import com.github.guyapooye.spaceutilities.SpaceUtilities.MOD_ID
 import com.github.guyapooye.spaceutilities.registries.BlockEntityEntry
-import com.github.guyapooye.spaceutilities.registries.BlockEntityRegistry
-import net.minecraft.core.Registry
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraftforge.registries.DeferredRegister
+import net.minecraftforge.registries.ForgeRegistries
 import java.util.function.Supplier
 
-object BlockEntityRegisterImpl {
+object BlockEntityRegistryImpl {
+    val BLOCK_ENTITIES: DeferredRegister<BlockEntityType<*>> =
+        DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MOD_ID)
 
+    fun <T : BlockEntity> register(
+        key: String,
+        factory: Supplier<BlockEntityType<T>>
+    ): BlockEntityEntry<T> {
+        return BlockEntityEntry(BLOCK_ENTITIES.register(key, factory), key)
+    }
 }
