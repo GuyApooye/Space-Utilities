@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "spaceutilities:block/decoupler_bottom",
+    "top": "spaceutilities:block/decoupler_top",
+    "side": "spaceutilities:block/decoupler_side"
+  }
+}

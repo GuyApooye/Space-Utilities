@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "spaceutilities:block/decoupler",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "spaceutilities:block/decoupler"
+    },
+    "facing=north": {
+      "model": "spaceutilities:block/decoupler",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "spaceutilities:block/decoupler",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "spaceutilities:block/decoupler",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "spaceutilities:block/decoupler",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

@@ -15,18 +15,25 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.github.guyapooye.spaceutilities.fabric.SpaceUtilitiesFabric"
+      {
+        "adapter": "kotlin",
+        "value": "com.github.guyapooye.spaceutilities.fabric.SpaceUtilitiesFabric"
+      }
     ],
     "client": [
-      "com.github.guyapooye.spaceutilities.fabric.client.SpaceUtilitiesFabricClient"
+      {
+        "adapter": "kotlin",
+        "value": "com.github.guyapooye.spaceutilities.fabric.SpaceUtilitiesClientFabric"
+      }
     ]
   },
   "mixins": [
     "spaceutilities.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.10",
+    "fabricloader": ">=0.14.19",
     "minecraft": "~1.20.1",
+    "fabric-language-kotlin": ">=1.10.8+kotlin.1.9.0",
     "java": ">=17",
     "fabric-api": "*"
   },

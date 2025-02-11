@@ -1,5 +1,5 @@
 package com.github.guyapooye.spaceutilities.block.entity
 
-interface ITickingBlockEntity : IBlockEntity {
+interface ITickingBlockEntity : SmartBlockEntity {
     fun tick() {}
 }

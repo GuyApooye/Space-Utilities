@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import java.util.function.Supplier
 
-object BlockEntityRegisterImpl {
+object BlockEntityRegistryImpl {
     @JvmStatic
     fun <T : BlockEntity> register(
         key: String,

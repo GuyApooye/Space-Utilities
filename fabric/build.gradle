@@ -29,9 +29,18 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
 
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.8+kotlin.1.9.0")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+
+    // Valkyrien Skies 2
+    modApi("org.valkyrienskies:valkyrienskies-120-fabric:${rootProject.vs2_version}")
+
+    compileOnly("org.valkyrienskies.core:api:${rootProject.vs_core_version}")
+    compileOnly("org.valkyrienskies.core:api-game:${rootProject.vs_core_version}")
+    compileOnly("org.valkyrienskies.core:util:${rootProject.vs_core_version}")
+    compileOnly("org.valkyrienskies.core:impl:${rootProject.vs_core_version}")
 }
 
 processResources {
