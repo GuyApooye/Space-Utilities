@@ -102,9 +102,9 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
         if (!assembled || level!!.isClientSide) return
 
         (level as ServerLevel).run {
-            val ship = shipObjectWorld.loadedShips.getById(shipId)?: return
+            val ship = shipObjectWorld.loadedShips.getById(shipId)!!
 
-            val controller = ship.getAttachment<DecouplerController>()?: return
+            val controller = ship.getAttachment<DecouplerController>()!!
 
             controller.totalDecouplers!!.remove(worldPosition.toJOML())
 
