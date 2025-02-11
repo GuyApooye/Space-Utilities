@@ -102,9 +102,9 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
         if (!assembled || level!!.isClientSide) return
 
         (level as ServerLevel).run {
-            val ship = shipObjectWorld.loadedShips.getById(shipId)!!
+            val ship = shipObjectWorld.loadedShips.getById(shipId)?: return
 
-            val controller = ship.getAttachment<DecouplerController>()!!
+            val controller = ship.getAttachment<DecouplerController>()?: return
 
             controller.totalDecouplers!!.remove(worldPosition.toJOML())
 
@@ -254,9 +254,9 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
         if (!assembled || level!!.isClientSide || decoupled) return
 
         (level as ServerLevel).run {
-            val ship = shipObjectWorld.loadedShips.getById(shipId)!!
+            val ship = shipObjectWorld.loadedShips.getById(shipId)?: return
 
-            val controller = ship.getAttachment<DecouplerController>()!!
+            val controller = ship.getAttachment<DecouplerController>()?: return
 
             shipObjectWorld.removeConstraint(controller.attach!!.constraintId)
             shipObjectWorld.removeConstraint(controller.fixedOrientation!!.constraintId)
