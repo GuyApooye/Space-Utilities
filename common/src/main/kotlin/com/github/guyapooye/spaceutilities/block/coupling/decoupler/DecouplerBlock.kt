@@ -10,7 +10,6 @@ import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.DirectionalBlock
-import net.minecraft.world.level.block.RedstoneLampBlock
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
@@ -47,10 +46,9 @@ class DecouplerBlock(properties: Properties) : DirectionalBlock(properties), IEn
     }
 
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState {
-        return (defaultBlockState().setValue(
-            FACING,
-            context.nearestLookingDirection.opposite
-        ) as BlockState)
+        return (
+                defaultBlockState().setValue(FACING, context.nearestLookingDirection.opposite) as BlockState
+                )
     }
 
     @Deprecated("Deprecated in Java")
@@ -75,9 +73,7 @@ class DecouplerBlock(properties: Properties) : DirectionalBlock(properties), IEn
             }
         }
     }
-
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
         builder.add(*arrayOf<Property<*>>(FACING))
     }
-
 }

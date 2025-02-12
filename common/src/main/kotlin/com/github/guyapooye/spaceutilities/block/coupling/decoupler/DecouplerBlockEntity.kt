@@ -93,8 +93,8 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
 
             if (newAttachId == null || newFixedId == null) return
 
-            controller.attach = VSConstraintAndId(newAttachId , newAttach)
-            controller.fixedOrientation = VSConstraintAndId(newFixedId , newFixed)
+            controller.attach = VSConstraintAndId(newAttachId, newAttach)
+            controller.fixedOrientation = VSConstraintAndId(newFixedId, newFixed)
 
 
             controller.totalDecouplers!!.forEach {
