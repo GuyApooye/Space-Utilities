@@ -39,6 +39,7 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
 ), ITickingBlockEntity {
     var assembled = false
     private var decoupled = false
+    private var applyForcesNextTick = false
     private var shipId = -1L
     private var shouldRefresh = false
 
@@ -52,12 +53,19 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
         assembled = tag.getBoolean("Assembled")
         decoupled = tag.getBoolean("Decoupled")
         shipId = tag.getLong("ShipId")
-        if (assembled) shouldRefresh = true
+        if (assembled && !decoupled) shouldRefresh = true
     }
 
     override fun tick() {
         if (level!!.isClientSide) return
-        if (shouldRefresh) refresh()
+        if (shouldRefresh) {
+            refresh()
+            shouldRefresh = false
+        }
+        if (applyForcesNextTick) {
+            applyForces()
+            applyForcesNextTick = false
+        }
     }
 
     private fun refresh() {
@@ -112,6 +120,24 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
                 shipObjectWorld.removeConstraint(controller.attach!!.constraintId)
                 shipObjectWorld.removeConstraint(controller.fixedOrientation!!.constraintId)
             }
+        }
+    }
+
+    fun applyForces() {
+        (level as ServerLevel).run {
+            val ship = shipObjectWorld.loadedShips.getById(shipId) ?: return
+
+            val controller = ship.getAttachment<DecouplerController>() ?: return
+
+            val shipOn = getShipManagingPos(worldPosition)
+
+            var shipId = shipObjectWorld.dimensionToGroundBodyIdImmutable[dimensionId]
+
+            if (shipOn != null) shipId = shipOn.id
+
+            controller.decouple(blockState.getValue(DirectionalBlock.FACING).normal.toJOMLD(), 50.0, shipId!!)
+
+            applyForcesNextTick = false
         }
     }
 
@@ -235,8 +261,8 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
                 val decoupler = getBlockEntity(pos, BlockEntityRegistry.DECOUPLER.get()).get()
                 decouplersList.add(Vector3i(pos.x,pos.y,pos.z))
                 decoupler.assembled = true
+                decoupler.decoupled = false
                 decoupler.shipId = shipId
-
             }
 
 
@@ -261,19 +287,15 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
             shipObjectWorld.removeConstraint(controller.attach!!.constraintId)
             shipObjectWorld.removeConstraint(controller.fixedOrientation!!.constraintId)
 
-            val shipOn = getShipManagingPos(worldPosition)
-
-            var shipId = shipObjectWorld.dimensionToGroundBodyIdImmutable[dimensionId]
-
-            if (shipOn != null) shipId = shipOn.id
-
-            controller.decouple(blockState.getValue(DirectionalBlock.FACING).normal.toJOMLD(), 50.0, shipId!!)
-
             controller.totalDecouplers!!.forEach {
                 getBlockEntity(BlockPos(it.x, it.y, it.z), BlockEntityRegistry.DECOUPLER.get()).get().decoupled = true
             }
+
+            applyForcesNextTick = true
         }
     }
+
+
 
     companion object {
 

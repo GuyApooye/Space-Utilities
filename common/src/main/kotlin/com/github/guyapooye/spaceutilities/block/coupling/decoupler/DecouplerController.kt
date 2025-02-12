@@ -7,7 +7,9 @@ import org.valkyrienskies.core.api.ships.*
 import org.valkyrienskies.core.api.ships.properties.ShipId
 import org.valkyrienskies.core.apigame.constraints.VSConstraintAndId
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl
+import java.text.NumberFormat
 
+@Suppress("DEPRECATION")
 class DecouplerController(private val attachmentPoint: Vector3d?, private val massCenterOffset: Vector3d?, var attach: VSConstraintAndId?, var fixedOrientation: VSConstraintAndId?, var totalDecouplers: MutableList<Vector3i>?) : ShipForcesInducer {
 
     private var force = 1.0
@@ -32,39 +34,39 @@ class DecouplerController(private val attachmentPoint: Vector3d?, private val ma
         if (shouldDecouple) {
             val otherShip = lookupPhysShip.invoke(otherShipId)
 
-            val force = normal.mul(force * totalDecouplers!!.size.toDouble())
+            physShip as PhysShipImpl
 
-//            println(attachmentPoint!!.add(.5,.5,.5, Vector3d()).toString(NumberFormat.getNumberInstance()))
-//            println(force.toString(NumberFormat.getNumberInstance()))
-//
-//            println()
-//
-//            println(force.mul(-1.0, Vector3d()).toString(NumberFormat.getNumberInstance()))
-//            println(otherShip?.transform?.worldToShip?.transformPosition(physShip.transform.shipToWorld.transformPosition(attachmentPoint, Vector3d()))?.sub(massCenterOffset)?.toString(NumberFormat.getNumberInstance()))
-
+            val force = normal.mul(force * physShip.inertia.shipMass, Vector3d())
 
             val decouplerTotal = Vector3i()
 
             val size = totalDecouplers!!.size.toDouble()
 
             totalDecouplers!!.forEach {
-
                 decouplerTotal.add(it.x,it.y,it.z)
             }
             val averagePos = Vector3d(
                 decouplerTotal.x/size,
                 decouplerTotal.y/size,
                 decouplerTotal.z/size,
-            )
+            ).add(.5,.5,.5)
 
-            var shipOnToWorld = Matrix4d().identity()
+            val firstPos = averagePos.fma(.5, normal)
+
+            println(force.toString(NumberFormat.getInstance()))
 
             if (otherShip != null) {
-                shipOnToWorld = otherShip.transform.shipToWorld as Matrix4d
-                otherShip.applyInvariantForceToPos(force.mul(-1.0, Vector3d()).div((otherShip as PhysShipImpl).inertia.shipMass),averagePos.fma(-.5, normal))
+                otherShip.applyRotDependentForceToPos(force.negate(Vector3d()), firstPos.sub(otherShip.transform.positionInShip, Vector3d()))
+                println(firstPos.toString(NumberFormat.getInstance()))
+                otherShip.transform.shipToWorld.transformPosition(averagePos)
             }
 
-            physShip.applyInvariantForceToPos(force.div((physShip as PhysShipImpl).inertia.shipMass), physShip.transform.worldToShip.transformPosition(shipOnToWorld.transformPosition(averagePos)))
+
+            val secondPos = physShip.transform.worldToShip.transformPosition(averagePos, Vector3d()).sub(physShip.transform.positionInShip, Vector3d())
+
+            println(secondPos.toString(NumberFormat.getInstance()))
+
+            physShip.applyRotDependentForceToPos(force, secondPos)
 
             shouldDecouple = false
         }

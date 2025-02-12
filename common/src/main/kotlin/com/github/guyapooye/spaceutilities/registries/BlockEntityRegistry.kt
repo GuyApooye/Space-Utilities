@@ -22,6 +22,7 @@ object BlockEntityRegistry {
         return Arrays.stream(blocks).map(BlockEntry<*>::get).toArray { arrayOfNulls<Block>(it) }
     }
 
+    @JvmStatic
     val DECOUPLER = register("decoupler") {BlockEntityType.Builder.of(::DecouplerBlockEntity, BlockRegistry.DECOUPLER.get()).build(null)}
 
     fun register() {}

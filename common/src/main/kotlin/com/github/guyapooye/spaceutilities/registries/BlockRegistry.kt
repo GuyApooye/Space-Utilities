@@ -55,6 +55,7 @@ object BlockRegistry {
         }
     }
 
+    @JvmStatic
     val REPLACE_ME = register("replace_me", {
         Block(
             BlockBehaviour.Properties.of()
@@ -70,6 +71,7 @@ object BlockRegistry {
         )
     }, RenderType.translucent(), false)
 
+    @JvmStatic
     val DECOUPLER = register("decoupler", {
         DecouplerBlock(
             BlockBehaviour.Properties.of()

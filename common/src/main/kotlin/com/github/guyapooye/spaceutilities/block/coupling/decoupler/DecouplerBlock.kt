@@ -8,11 +8,10 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.DirectionalBlock
+import net.minecraft.world.level.block.RedstoneLampBlock
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.level.block.piston.PistonBaseBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.Property
@@ -59,6 +58,23 @@ class DecouplerBlock(properties: Properties) : DirectionalBlock(properties), IEn
         IEntityBlock.onRemove(state, level, pos, newState)
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun neighborChanged(
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        block: Block,
+        fromPos: BlockPos,
+        isMoving: Boolean
+    ) {
+        if (!level.isClientSide) {
+            if (level.hasNeighborSignal(pos)) {
+                withBlockEntityDo(level, pos) {
+                    if (it.assembled) it.decouple()
+                }
+            }
+        }
+    }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
         builder.add(*arrayOf<Property<*>>(FACING))

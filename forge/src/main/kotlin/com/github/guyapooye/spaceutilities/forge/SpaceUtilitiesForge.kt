@@ -10,14 +10,11 @@ import com.github.guyapooye.spaceutilities.registries.forge.ItemRegistryImpl
 import com.github.guyapooye.spaceutilities.util.PlatformUtils.runWhenOn
 import net.minecraft.core.registries.Registries
 import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.registries.DeferredRegister
 import thedarkcolour.kotlinforforge.KotlinModLoadingContext
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
-import thedarkcolour.kotlinforforge.test.KotlinForForge
 
 @Mod(MOD_ID)
 class SpaceUtilitiesForge {
@@ -38,11 +35,8 @@ class SpaceUtilitiesForge {
         runWhenOn(Dist.CLIENT) {
             MOD_BUS.addListener(::initClient)
         }
-
     }
-
     private fun initClient(event: FMLClientSetupEvent) {
         SpaceUtilities.initClient()
     }
-
 }

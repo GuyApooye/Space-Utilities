@@ -12,6 +12,7 @@ object BlockEntityRegistryImpl {
     val BLOCK_ENTITIES: DeferredRegister<BlockEntityType<*>> =
         DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MOD_ID)
 
+    @JvmStatic
     fun <T : BlockEntity> register(
         key: String,
         factory: Supplier<BlockEntityType<T>>
