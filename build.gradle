@@ -20,7 +20,7 @@ architectury {
 
 allprojects {
     group = rootProject.maven_group
-    version = rootProject.mod_version
+    version = rootProject.mod_version + "git rev-parse HEAD".execute().text.trim().substring(0, 10)
 }
 
 subprojects {
