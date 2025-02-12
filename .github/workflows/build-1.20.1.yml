@@ -22,9 +22,6 @@ jobs:
         with:
           submodules: true
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
