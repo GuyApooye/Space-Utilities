@@ -28,10 +28,6 @@ jobs:
           distribution: "temurin"
           java-version: 17
 
-      - name: Change wrapper permissions
-        if: ${{ runner.os != 'Windows' }}
-        run: chmod +x ./gradlew
-
       - name: Init gradle wrapper
         run: gradle wrapper
 
