@@ -38,6 +38,7 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
     blockState
 ), ITickingBlockEntity {
     var assembled = false
+    var force = 50.0
     private var decoupled = false
     private var applyForcesNextTick = false
     private var shipId = -1L
@@ -46,12 +47,14 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
     override fun saveAdditional(tag: CompoundTag) {
         tag.putBoolean("Assembled", assembled)
         tag.putBoolean("Decoupled", decoupled)
+        tag.putDouble("Force", force)
         tag.putLong("ShipId", shipId)
     }
 
     override fun load(tag: CompoundTag) {
         assembled = tag.getBoolean("Assembled")
         decoupled = tag.getBoolean("Decoupled")
+        force = tag.getDouble("Force")
         shipId = tag.getLong("ShipId")
         if (assembled && !decoupled) shouldRefresh = true
     }
@@ -135,7 +138,7 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
 
             if (shipOn != null) shipId = shipOn.id
 
-            controller.decouple(blockState.getValue(DirectionalBlock.FACING).normal.toJOMLD(), 50.0, shipId!!)
+            controller.decouple(blockState.getValue(DirectionalBlock.FACING).normal.toJOMLD(), force, shipId!!)
 
             applyForcesNextTick = false
         }

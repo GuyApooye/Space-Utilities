@@ -36,7 +36,7 @@ class DecouplerController(private val attachmentPoint: Vector3d?, private val ma
 
             physShip as PhysShipImpl
 
-            val force = normal.mul(force * physShip.inertia.shipMass, Vector3d())
+            val force = normal.mul(force * 1000, Vector3d())
 
             val decouplerTotal = Vector3i()
 
