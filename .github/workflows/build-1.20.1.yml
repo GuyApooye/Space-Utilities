@@ -27,6 +27,10 @@ jobs:
         with:
           distribution: "temurin"
           java-version: 17
+
+      - name: Create Wrapper
+        run: gradle wrapper
+
       - name: Make Gradle Wrapper Executable
         if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlew
