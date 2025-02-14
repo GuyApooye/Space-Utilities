@@ -27,13 +27,12 @@ jobs:
         with:
           distribution: "temurin"
           java-version: 17
-
-      - name: Change wrapper permissions
+      - name: Make Gradle Wrapper Executable
         if: ${{ runner.os != 'Windows' }}
-        run: chmod +x gradle
+        run: chmod +x ./gradlew
 
       - name: Build
-        run: gradle build
+        run: ./gradlew clean build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
