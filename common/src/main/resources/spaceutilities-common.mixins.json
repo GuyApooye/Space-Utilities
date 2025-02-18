@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "com.github.guyapooye.spaceutilities.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "client": [
+    "DebugRendererMixin"
+  ],
+  "mixins": [
+    "PlayerListMixin",
+    "accessor.QueryableShipDataAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

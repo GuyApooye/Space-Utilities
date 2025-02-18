@@ -1,12 +1,17 @@
 package com.github.guyapooye.spaceutilities.util
 
+import com.github.guyapooye.spaceutilities.mixin.accessor.QueryableShipDataAccessor
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Vec3i
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.ChunkPos
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.ServerShip
+import org.valkyrienskies.core.api.ships.Ship
+import org.valkyrienskies.core.impl.datastructures.ChunkClaimMap
+import org.valkyrienskies.core.impl.game.ships.QueryableShipDataImpl
 import org.valkyrienskies.core.impl.game.ships.ShipData
 import org.valkyrienskies.core.impl.game.ships.ShipTransformImpl
 import org.valkyrienskies.core.impl.networking.simple.sendToClient
@@ -92,4 +97,14 @@ fun simpleCreateShipsWithBlock(
     }
 
     return ship
+}
+
+fun MinecraftServer.getShipManagingPos(x: Int, z: Int): ServerShip? {
+    return getShipManagingPosImpl(this, x shr 4, z shr 4)
+}
+
+private fun getShipManagingPosImpl(server: MinecraftServer, chunkX: Int, chunkZ: Int): ServerShip? {
+    val ship = (server.shipObjectWorld.allShips as QueryableShipDataAccessor).chunkClaimToShipData[chunkX, chunkZ]
+    if (ship != null) return ship as ServerShip
+    return null
 }

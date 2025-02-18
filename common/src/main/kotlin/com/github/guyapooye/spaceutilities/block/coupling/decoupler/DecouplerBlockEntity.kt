@@ -4,6 +4,7 @@ import com.github.guyapooye.spaceutilities.SpaceUtilities.LOGGER
 import com.github.guyapooye.spaceutilities.block.entity.ITickingBlockEntity
 import com.github.guyapooye.spaceutilities.registries.BlockEntityRegistry
 import com.github.guyapooye.spaceutilities.registries.BlockRegistry
+import com.github.guyapooye.spaceutilities.ship.ShipNetwork.Companion.network
 import com.github.guyapooye.spaceutilities.util.simpleCreateShipsWithBlock
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -201,6 +202,8 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
 
             if (shipOn != null) {
 
+                ship.network = shipOn.network
+                shipOn.network.addEdge(shipOn.id, ship.id)
 
                 shipOn.shipToWorld.transformPosition(worldPosition)
                 shipOn.transform.shipToWorldRotation.transform(worldNormal)

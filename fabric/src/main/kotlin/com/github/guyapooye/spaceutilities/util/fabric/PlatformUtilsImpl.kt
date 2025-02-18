@@ -1,5 +1,7 @@
 package com.github.guyapooye.spaceutilities.util.fabric
 
+import com.github.guyapooye.spaceutilities.fabric.SpaceUtilitiesFabric
+import com.github.guyapooye.spaceutilities.networking.PacketChannel
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
 
@@ -9,5 +11,9 @@ object PlatformUtilsImpl {
         if (FabricLoader.getInstance().environmentType == e as EnvType) {
             supplier.invoke()
         }
+    }
+    @JvmStatic
+    fun getPacketChannel(): PacketChannel {
+        return SpaceUtilitiesFabric.PACKET_CHANNEL
     }
 }

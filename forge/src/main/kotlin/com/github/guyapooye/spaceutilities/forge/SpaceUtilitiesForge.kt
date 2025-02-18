@@ -4,6 +4,8 @@ import com.github.guyapooye.spaceutilities.SpaceUtilities
 import com.github.guyapooye.spaceutilities.SpaceUtilities.MOD_ID
 import com.github.guyapooye.spaceutilities.SpaceUtilities.init
 import com.github.guyapooye.spaceutilities.SpaceUtilities.spaceUtilitiesTab
+import com.github.guyapooye.spaceutilities.networking.PacketChannel
+import com.github.guyapooye.spaceutilities.networking.forge.PacketChannelImpl
 import com.github.guyapooye.spaceutilities.registries.forge.BlockEntityRegistryImpl
 import com.github.guyapooye.spaceutilities.registries.forge.BlockRegistryImpl
 import com.github.guyapooye.spaceutilities.registries.forge.ItemRegistryImpl
@@ -18,6 +20,7 @@ import thedarkcolour.kotlinforforge.forge.MOD_BUS
 
 @Mod(MOD_ID)
 class SpaceUtilitiesForge {
+
     init {
         val tabRegister = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID)
 
@@ -38,5 +41,10 @@ class SpaceUtilitiesForge {
     }
     private fun initClient(event: FMLClientSetupEvent) {
         SpaceUtilities.initClient()
+    }
+
+    companion object {
+        @JvmStatic
+        val PACKET_CHANNEL: PacketChannel = PacketChannelImpl()
     }
 }
