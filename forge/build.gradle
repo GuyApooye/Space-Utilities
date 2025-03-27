@@ -57,6 +57,15 @@ dependencies {
 
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
     implementation(include("io.github.llamalad7:mixinextras-forge:0.4.1"))
+
+//    modImplementation ("foundry.veil:Veil-forge-${project.minecraft_version}:${project.veil_version}") {
+//        exclude group: "maven.modrinth"
+//        exclude group: "org.lwjgl"
+//    }
+//
+//    include ("foundry.veil:Veil-forge-${project.minecraft_version}:${project.veil_version}")
+
+
 }
 
 processResources {

@@ -18,21 +18,26 @@ object BlockEntityRegistry {
         throw AssertionError()
     }
 
-    private fun validBlocks(vararg blocks: BlockEntry<*>): Array<Block> {
-        return Arrays.stream(blocks).map(BlockEntry<*>::get).toArray { arrayOfNulls<Block>(it) }
+    private fun validBlocks(vararg blocks: BlockRegistry.BlockEntry<*>): Array<Block> {
+        return Arrays.stream(blocks).map(BlockRegistry.BlockEntry<*>::get).toArray { arrayOfNulls<Block>(it) }
     }
 
     @JvmStatic
-    val DECOUPLER = register("decoupler") {BlockEntityType.Builder.of(::DecouplerBlockEntity, BlockRegistry.DECOUPLER.get()).build(null)}
+    val DECOUPLER = register("decoupler") {BlockEntityType.Builder.of(::DecouplerBlockEntity, *validBlocks(
+        BlockRegistry.DECOUPLER_BASIC,
+        BlockRegistry.DECOUPLER_INTERMEDIATE,
+        BlockRegistry.DECOUPLER_ADVANCED,
+        BlockRegistry.DECOUPLER_BEST
+    )).build(null)}
 
     fun register() {}
 
-}
 
-class BlockEntityEntry<T : BlockEntity>(private val factory: Supplier<BlockEntityType<T>>, key: String) {
-    val key: ResourceLocation = asResource(key)
+    class BlockEntityEntry<T : BlockEntity>(private val factory: Supplier<BlockEntityType<T>>, key: String) {
+        val key: ResourceLocation = asResource(key)
 
-    fun get(): BlockEntityType<T> {
-        return factory.get()
+        fun get(): BlockEntityType<T> {
+            return factory.get()
+        }
     }
 }

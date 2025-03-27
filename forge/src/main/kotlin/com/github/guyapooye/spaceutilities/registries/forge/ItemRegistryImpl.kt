@@ -1,7 +1,7 @@
 package com.github.guyapooye.spaceutilities.registries.forge
 
 import com.github.guyapooye.spaceutilities.SpaceUtilities.MOD_ID
-import com.github.guyapooye.spaceutilities.registries.ItemEntry
+import com.github.guyapooye.spaceutilities.registries.ItemRegistry.ItemEntry
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.world.item.Item
 import net.minecraftforge.registries.DeferredRegister

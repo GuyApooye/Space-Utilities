@@ -24,6 +24,7 @@ configurations {
     }
 }
 
+
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 
@@ -41,6 +42,15 @@ dependencies {
     compileOnly("org.valkyrienskies.core:api-game:${rootProject.vs_core_version}")
     compileOnly("org.valkyrienskies.core:util:${rootProject.vs_core_version}")
     compileOnly("org.valkyrienskies.core:impl:${rootProject.vs_core_version}")
+
+//    modImplementation("foundry.veil:Veil-fabric-${project.minecraft_version}:${project.veil_version}") {
+//        transitive = false
+//    }
+//
+//    include ("foundry.veil:Veil-fabric-${project.minecraft_version}:${project.veil_version}")
+
+    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.4.1")))
+
 }
 
 processResources {

@@ -26,19 +26,20 @@ import org.valkyrienskies.core.apigame.constraints.VSFixedOrientationConstraint
 import org.valkyrienskies.core.impl.game.ships.ShipDataCommon
 import org.valkyrienskies.core.impl.game.ships.ShipTransformImpl.Companion.create
 import org.valkyrienskies.core.util.datastructures.DenseBlockPosSet
+import org.valkyrienskies.mod.common.assembly.createNewShipWithBlocks
 import org.valkyrienskies.mod.common.dimensionId
 import org.valkyrienskies.mod.common.getShipManagingPos
+import org.valkyrienskies.mod.common.item.ShipAssemblerItem
 import org.valkyrienskies.mod.common.shipObjectWorld
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
 import java.util.ArrayList
 import java.util.Collections
 
-class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEntityType<*> = BlockEntityRegistry.DECOUPLER.get()) : BlockEntity(type, pos,
+open class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEntityType<*> = BlockEntityRegistry.DECOUPLER.get()) : BlockEntity(type, pos,
     blockState
 ), ITickingBlockEntity {
     var assembled = false
-    var force = 50.0
     private var decoupled = false
     private var applyForcesNextTick = false
     private var shipId = -1L
@@ -47,14 +48,12 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
     override fun saveAdditional(tag: CompoundTag) {
         tag.putBoolean("Assembled", assembled)
         tag.putBoolean("Decoupled", decoupled)
-        tag.putDouble("Force", force)
         tag.putLong("ShipId", shipId)
     }
 
     override fun load(tag: CompoundTag) {
         assembled = tag.getBoolean("Assembled")
         decoupled = tag.getBoolean("Decoupled")
-        force = tag.getDouble("Force")
         shipId = tag.getLong("ShipId")
         if (assembled && !decoupled) shouldRefresh = true
     }
@@ -138,7 +137,7 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
 
             if (shipOn != null) shipId = shipOn.id
 
-            controller.decouple(blockState.getValue(DirectionalBlock.FACING).normal.toJOMLD(), force, shipId!!)
+            controller.decouple(blockState.getValue(DirectionalBlock.FACING).normal.toJOMLD(), shipId!!)
 
             applyForcesNextTick = false
         }
@@ -147,7 +146,8 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
     fun assemble() {
 
         if (level!!.isClientSide) {
-            LOGGER.warn("DecouplerBlockEntity.assemble() called from Client side! This should not happen!")
+            LOGGER.warn("DecouplerBlockEntity#assemble() called from Client side! This should not happen!")
+            return
         }
 
         (level as ServerLevel).run {
@@ -222,7 +222,7 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
 
 
             (ship as ShipDataCommon).transform = create(
-                centerBlockPosInWorld,
+                centerBlockPosInWorld.fma(-0.5, shipNormal),
                 shipCenter,
                 rotationInWorld,
                 scaling
@@ -269,9 +269,7 @@ class DecouplerBlockEntity(pos: BlockPos, blockState: BlockState, type: BlockEnt
             }
 
 
-
-            ship.saveAttachment(DecouplerController(attachmentPoint, massCenterOffset, VSConstraintAndId(attachId, attachmentConstraint), VSConstraintAndId(fixedOrientId, fixedOrientationConstraint), Collections.synchronizedList(decouplersList)))
-
+            ship.saveAttachment(DecouplerController((blockState.block as DecouplerBlock).tier.multiplier.toDouble(), attachmentPoint, massCenterOffset, VSConstraintAndId(attachId, attachmentConstraint), VSConstraintAndId(fixedOrientId, fixedOrientationConstraint), Collections.synchronizedList(decouplersList)))
 
 
         }

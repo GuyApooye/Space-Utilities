@@ -1,7 +1,7 @@
 package com.github.guyapooye.spaceutilities.registries.fabric
 
 import com.github.guyapooye.spaceutilities.SpaceUtilities.asResource
-import com.github.guyapooye.spaceutilities.registries.ItemEntry
+import com.github.guyapooye.spaceutilities.registries.ItemRegistry.ItemEntry
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.Item

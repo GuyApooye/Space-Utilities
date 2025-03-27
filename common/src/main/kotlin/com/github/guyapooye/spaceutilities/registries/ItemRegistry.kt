@@ -1,11 +1,7 @@
 package com.github.guyapooye.spaceutilities.registries
 
 import com.github.guyapooye.spaceutilities.SpaceUtilities.asResource
-import com.github.guyapooye.spaceutilities.registries.BlockRegistry.REPLACE_ME
-import com.google.common.collect.ImmutableList
 import dev.architectury.injectables.annotations.ExpectPlatform
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.*
@@ -44,24 +40,23 @@ object ItemRegistry {
     fun register() {
     }
 
-}
+    class ItemEntry<T : Item> (private val factory: Supplier<T>, key: String) : ItemLike{
+        val key: ResourceLocation = asResource(key)
 
-class ItemEntry<T : Item> (private val factory: Supplier<T>, key: String) : ItemLike{
-    val key: ResourceLocation = asResource(key)
+        fun asItemStack(): ItemStack {
+            return ItemStack(get())
+        }
 
-    fun asItemStack(): ItemStack {
-        return ItemStack(get())
-    }
+        fun asItemStack(count: Int): ItemStack {
+            return ItemStack(get(), count)
+        }
 
-    fun asItemStack(count: Int): ItemStack {
-        return ItemStack(get(), count)
-    }
+        fun get(): T {
+            return factory.get()
+        }
 
-    fun get(): T {
-        return factory.get()
-    }
-
-    override fun asItem(): Item {
-        return get()
+        override fun asItem(): Item {
+            return get()
+        }
     }
 }

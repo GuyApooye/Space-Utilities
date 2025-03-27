@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "spaceutilities:decoupler"
+          "name": "spaceutilities:decoupler_intermediate"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "spaceutilities:blocks/decoupler"
+  "random_sequence": "spaceutilities:blocks/decoupler_intermediate"
 }

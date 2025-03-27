@@ -2,6 +2,7 @@ package com.github.guyapooye.spaceutilities.registries
 
 import com.github.guyapooye.spaceutilities.SpaceUtilities.asResource
 import com.github.guyapooye.spaceutilities.block.coupling.decoupler.DecouplerBlock
+import com.github.guyapooye.spaceutilities.block.properties.Tier
 import com.github.guyapooye.spaceutilities.util.PlatformUtils
 import dev.architectury.injectables.annotations.ExpectPlatform
 import net.fabricmc.api.EnvType
@@ -30,8 +31,14 @@ object BlockRegistry {
         throw AssertionError()
     }
 
-    private fun <T : Block> register(key: String, factory: Supplier<T>, renderType: RenderType = RenderType.solid(), showInTab: Boolean = true): BlockEntry<T> {
-        val entry = register(key, factory, showInTab)
+    @JvmStatic
+    @ExpectPlatform
+    private fun <T : Block> registerNoItem(key: String, factory: Supplier<T>, showInTab: Boolean = true): BlockEntry<T> {
+        throw AssertionError()
+    }
+
+    private fun <T : Block> register(key: String, factory: Supplier<T>, renderType: RenderType = RenderType.solid(), showInTab: Boolean = true, createItem: Boolean = true): BlockEntry<T> {
+        val entry = if(createItem) register(key, factory, showInTab) else registerNoItem(key, factory, showInTab)
 
         PlatformUtils.runWhenOn(EnvType.CLIENT) {
             BLOCK_TO_RENDERTYPE[entry] = renderType
@@ -72,15 +79,31 @@ object BlockRegistry {
     }, RenderType.translucent(), false)
 
     @JvmStatic
-    val DECOUPLER = register("decoupler", {
-        DecouplerBlock(
-            BlockBehaviour.Properties.of()
-                .sound(SoundType.STONE)
-                .isValidSpawn(::never)
-                .strength(1.5F)
-                .mapColor(MapColor.COLOR_LIGHT_GRAY)
-                .pushReaction(PushReaction.BLOCK)
-        )
+    val DECOUPLER_BASIC : BlockEntry<DecouplerBlock> = register("decoupler_basic", { object :
+        DecouplerBlock() {
+        override val tier: Tier = Tier.BASIC
+        }
+    }, RenderType.cutoutMipped(), true)
+
+    @JvmStatic
+    val DECOUPLER_INTERMEDIATE : BlockEntry<DecouplerBlock> = register("decoupler_intermediate", { object :
+        DecouplerBlock() {
+        override val tier: Tier = Tier.INTERMEDIATE
+    }
+    }, RenderType.cutoutMipped(), true)
+
+    @JvmStatic
+    val DECOUPLER_ADVANCED : BlockEntry<DecouplerBlock> = register("decoupler_advanced", { object :
+        DecouplerBlock() {
+        override val tier: Tier = Tier.ADVANCED
+    }
+    }, RenderType.cutoutMipped(), true)
+
+    @JvmStatic
+    val DECOUPLER_BEST : BlockEntry<DecouplerBlock> = register("decoupler_best", { object :
+        DecouplerBlock() {
+        override val tier: Tier = Tier.BEST
+    }
     }, RenderType.cutoutMipped(), true)
 
     fun register() {}
@@ -98,24 +121,24 @@ object BlockRegistry {
         return true
     }
 
-}
 
-class BlockEntry<T : Block>(private val factory: Supplier<T>, key: String) : ItemLike {
-    val key: ResourceLocation = asResource(key)
+    class BlockEntry<T : Block>(private val factory: Supplier<T>, key: String) : ItemLike {
+        val key: ResourceLocation = asResource(key)
 
-    override fun asItem(): Item {
-        return get().asItem()
-    }
+        override fun asItem(): Item {
+            return get().asItem()
+        }
 
-    fun asItemStack(): ItemStack {
-        return ItemStack(get())
-    }
+        fun asItemStack(): ItemStack {
+            return ItemStack(get())
+        }
 
-    fun asItemStack(count: Int): ItemStack {
-        return ItemStack(get(), count)
-    }
+        fun asItemStack(count: Int): ItemStack {
+            return ItemStack(get(), count)
+        }
 
-    fun get(): T {
-        return factory.get()
+        fun get(): T {
+            return factory.get()
+        }
     }
 }

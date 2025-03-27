@@ -1,3 +1,7 @@
 {
-  "block.spaceutilities.replace_me": "Replace Me! Block"
+  "block.spaceutilities.replace_me": "Replace Me! Block",
+  "block.spaceutilities.decoupler_basic": "Basic Decoupler",
+  "block.spaceutilities.decoupler_intermediate": "Intermediate Decoupler",
+  "block.spaceutilities.decoupler_advanced": "Advanced Decoupler",
+  "block.spaceutilities.decoupler_best": "Best Decoupler"
 }

@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "spaceutilities:decoupler"
+    "spaceutilities:decoupler_basic",
+    "spaceutilities:decoupler_intermediate",
+    "spaceutilities:decoupler_advanced",
+    "spaceutilities:decoupler_best"
   ]
 }

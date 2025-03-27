@@ -8,10 +8,11 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Items
+import org.slf4j.Logger
 
 object SpaceUtilities {
     const val MOD_ID = "spaceutilities"
-    val LOGGER = LogUtils.getLogger()
+    val LOGGER: Logger = LogUtils.getLogger()
 
     lateinit var spaceUtilitiesTab: CreativeModeTab
 
@@ -23,7 +24,11 @@ object SpaceUtilities {
 
         spaceUtilitiesTab = CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
             .title(Component.translatable("itemGroup.spaceutilities")).icon { Items.IRON_BLOCK.defaultInstance }
-            .displayItems { _, output -> ItemRegistry.allTabItems.forEach { output.accept(it) }}.build()
+            .displayItems { _, output -> displayItems(output)}.build()
+    }
+
+    private fun displayItems(output: CreativeModeTab.Output) {
+        ItemRegistry.allTabItems.forEach { output.accept(it) }
     }
 
     fun initClient() {

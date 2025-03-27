@@ -1,7 +1,7 @@
 package com.github.guyapooye.spaceutilities.registries.fabric
 
 import com.github.guyapooye.spaceutilities.SpaceUtilities.asResource
-import com.github.guyapooye.spaceutilities.registries.BlockEntry
+import com.github.guyapooye.spaceutilities.registries.BlockRegistry.BlockEntry
 import com.github.guyapooye.spaceutilities.registries.ItemRegistry
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.minecraft.client.renderer.RenderType
@@ -16,6 +16,11 @@ object BlockRegistryImpl {
         val block: T = Registry.register(BuiltInRegistries.BLOCK, asResource(key), factory.get())
         ItemRegistry.registerBlockItem(key, { block }, showInTab)
         return BlockEntry({ block }, key)
+    }
+
+    @JvmStatic
+    fun <T : Block> registerNoItem(key: String, factory: Supplier<T>, showInTab: Boolean = true): BlockEntry<T> {
+        return BlockEntry({ Registry.register(BuiltInRegistries.BLOCK, asResource(key), factory.get()) }, key)
     }
 
     @JvmStatic
