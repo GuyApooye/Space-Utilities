@@ -14,7 +14,7 @@ dependencies {
     compileOnly("org.valkyrienskies.core:util:${rootProject.vs_core_version}")
     compileOnly("org.valkyrienskies.core:impl:${rootProject.vs_core_version}")
 
-    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.4.1")))
+//    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.4.1")))
 
     // Valkyrien Skies 2
     modApi("org.valkyrienskies:valkyrienskies-120-common:${rootProject.vs2_version}")
